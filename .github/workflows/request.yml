@@ -54,9 +54,26 @@ jobs:
           [ -f "roster/$UKEY.json" ] \
             || fail "❌ You're not registered yet. Register first: https://github.com/$GH_REPO/issues/new?template=01-register.yml (use your Canvas class code), then request again."
 
-          # --- assignment must be in config ---
-          TEMPLATE="$(jq -r --arg c "$COURSE" --arg a "$ASSIGN" '.courses[$c].assignments[$a] // empty' config.json)"
-          [ -n "$TEMPLATE" ] || fail "❌ Assignment \`$ASSIGN\` is not offered for $COURSE."
+          # --- assignment must be in config; value = template string (always open) OR object with time gate ---
+          ENTRY="$(jq -c --arg c "$COURSE" --arg a "$ASSIGN" '.courses[$c].assignments[$a] // empty' config.json)"
+          [ -n "$ENTRY" ] || fail "❌ Assignment \`$ASSIGN\` is not offered for $COURSE."
+
+          if [ "$(jq -r 'type' <<<"$ENTRY")" = "string" ]; then
+            TEMPLATE="$(jq -r '.' <<<"$ENTRY")"          # plain assignment — always available
+          else
+            TEMPLATE="$(jq -r '.template' <<<"$ENTRY")"  # gated assignment (e.g. exam/quiz)
+            FROM="$(jq -r '.available_from // empty' <<<"$ENTRY")"
+            UNTIL="$(jq -r '.available_until // empty' <<<"$ENTRY")"
+            NOW="$(date -u +%s)"
+            if [ -n "$FROM" ] && [ "$NOW" -lt "$(date -d "$FROM" +%s)" ]; then
+              fail "⏳ \`$ASSIGN\` is not open yet — opens **$FROM**. Request again then."
+            fi
+            if [ -n "$UNTIL" ] && [ "$NOW" -gt "$(date -d "$UNTIL" +%s)" ]; then
+              fail "🔒 \`$ASSIGN\` is closed (was open until **$UNTIL**)."
+            fi
+          fi
+          [ -n "$TEMPLATE" ] && [ "$TEMPLATE" != "null" ] \
+            || fail "⚠️ Setup error: assignment \`$ASSIGN\` has no template in config."
 
           SEM="$(jq -r --arg c "$COURSE" '.courses[$c].semester' config.json)"
           PATTERN="$(jq -r --arg c "$COURSE" '.courses[$c].student_repo_pattern' config.json)"
