@@ -1,0 +1,83 @@
+name: register
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write   # commit roster/<user>.json
+  issues: write     # comment + close
+
+# one register at a time per opener (stops double-fire); cross-user races handled by push-retry
+concurrency:
+  group: register-${{ github.event.issue.user.login }}
+  cancel-in-progress: false
+
+jobs:
+  register:
+    if: startsWith(github.event.issue.title, 'register:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Process registration
+        env:
+          # ALL user-controlled values arrive as env vars — never inline ${{ }} in run: (injection-safe, #12)
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          JOIN_CODE: ${{ secrets.JOIN_CODE }}   # the class code lives in secrets, NOT public config.json
+          ISSUE: ${{ github.event.issue.number }}
+          USERNAME: ${{ github.event.issue.user.login }}
+          BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+
+          # extract a single-line field value by its "### <Label>" header (inputs are one-line → no forged headers)
+          field() {
+            printf '%s\n' "$BODY" | awk -v lbl="### $1" '
+              $0==lbl {f=1; next}
+              f && NF {gsub(/\r/,""); print; exit}
+            '
+          }
+
+          NAME="$(field Name)"
+          EMAIL="$(field Email)"
+          CODE="$(field Code)"
+          UKEY="$(printf '%s' "$USERNAME" | tr '[:upper:]' '[:lower:]')"
+          EXPECTED="$JOIN_CODE"
+
+          fail() {
+            gh issue comment "$ISSUE" --body "$1"
+            gh issue close "$ISSUE"
+            exit 0
+          }
+
+          # --- gate: class join code ---
+          [ -n "$CODE" ] && [ "$CODE" = "$EXPECTED" ] || \
+            fail "❌ Registration failed: wrong or missing class **code**. Get it from your Canvas course page, then open a new Register issue."
+          [ -n "$NAME" ] && [ -n "$EMAIL" ] || \
+            fail "❌ Registration failed: **name** and **email** are required."
+
+          # --- write roster entry (jq --arg = safe JSON, no string concat) ---
+          mkdir -p roster
+          STAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          jq -n --arg u "$UKEY" --arg n "$NAME" --arg e "$EMAIL" --arg t "$STAMP" \
+            '{username:$u, name:$n, email:$e, registered:$t}' > "roster/$UKEY.json"
+
+          # --- commit (key-per-file: re-register overwrites same file = upsert) ---
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "roster/$UKEY.json"
+          if git diff --cached --quiet; then
+            echo "roster unchanged"
+          else
+            git commit -m "register: $UKEY"
+            for i in 1 2 3 4 5; do
+              git push && break
+              echo "push race, retry $i"
+              git pull --rebase --autostash
+            done
+          fi
+
+          gh issue comment "$ISSUE" --body "✅ Registered: **$NAME** (\`$UKEY\`). You can now request assignment repos from your Canvas course link."
+          gh issue close "$ISSUE"

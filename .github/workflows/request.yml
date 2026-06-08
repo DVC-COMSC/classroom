@@ -1,0 +1,109 @@
+name: request
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write   # commit log/<repo>.json
+  issues: write     # comment + close
+
+concurrency:
+  group: request-${{ github.event.issue.user.login }}
+  cancel-in-progress: false
+
+jobs:
+  request:
+    if: startsWith(github.event.issue.title, 'request-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Process request
+        env:
+          # in-repo ops (comment/close/log commit) use the auto token; cross-repo (create/collab) uses ORG_PAT
+          GH_TOKEN: ${{ github.token }}
+          ORG_PAT: ${{ secrets.ORG_PAT }}
+          GH_REPO: ${{ github.repository }}
+          ORG: ${{ github.repository_owner }}
+          ISSUE: ${{ github.event.issue.number }}
+          USERNAME: ${{ github.event.issue.user.login }}
+          TITLE: ${{ github.event.issue.title }}
+          BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+
+          field() {
+            printf '%s\n' "$BODY" | awk -v lbl="### $1" '
+              $0==lbl {f=1; next}
+              f && NF {gsub(/\r/,""); print; exit}
+            '
+          }
+          fail() { gh issue comment "$ISSUE" --body "$1"; gh issue close "$ISSUE"; exit 0; }
+
+          UKEY="$(printf '%s' "$USERNAME" | tr '[:upper:]' '[:lower:]')"
+          # course from title prefix "request-<course>:" (no course hardcoded, #17)
+          COURSE="$(printf '%s' "$TITLE" | sed -n 's/^request-\([a-z0-9]*\):.*/\1/p')"
+          ASSIGN="$(field Assignment)"
+
+          [ -n "$COURSE" ] || fail "❌ Could not read the course from the issue title. Use the course's Request link from Canvas."
+          jq -e --arg c "$COURSE" '.courses[$c]' config.json >/dev/null 2>&1 \
+            || fail "❌ Unknown course \`$COURSE\`."
+
+          # --- must be registered ---
+          [ -f "roster/$UKEY.json" ] \
+            || fail "❌ You're not registered yet. Register first: https://github.com/$GH_REPO/issues/new?template=01-register.yml (use your Canvas class code), then request again."
+
+          # --- assignment must be in config ---
+          TEMPLATE="$(jq -r --arg c "$COURSE" --arg a "$ASSIGN" '.courses[$c].assignments[$a] // empty' config.json)"
+          [ -n "$TEMPLATE" ] || fail "❌ Assignment \`$ASSIGN\` is not offered for $COURSE."
+
+          SEM="$(jq -r --arg c "$COURSE" '.courses[$c].semester' config.json)"
+          PATTERN="$(jq -r --arg c "$COURSE" '.courses[$c].student_repo_pattern' config.json)"
+          REPO="$PATTERN"
+          REPO="${REPO//\{semester\}/$SEM}"
+          REPO="${REPO//\{assignment\}/$ASSIGN}"
+          REPO="${REPO//\{username\}/$UKEY}"
+
+          NAME="$(jq -r '.name' "roster/$UKEY.json")"
+          EMAIL="$(jq -r '.email' "roster/$UKEY.json")"
+
+          # --- create repo from template (idempotent); cross-repo → ORG_PAT ---
+          if GH_TOKEN="$ORG_PAT" gh repo view "$ORG/$REPO" >/dev/null 2>&1; then
+            echo "repo exists, idempotent path"
+          else
+            # template must exist + be a template (setup error, not student fault)
+            GH_TOKEN="$ORG_PAT" gh repo view "$ORG/$TEMPLATE" >/dev/null 2>&1 \
+              || fail "⚠️ Setup error: template \`$ORG/$TEMPLATE\` not found. (Instructor: check config / template flag.)"
+            GH_TOKEN="$ORG_PAT" gh repo create "$ORG/$REPO" --template "$ORG/$TEMPLATE" --private
+          fi
+
+          # --- ensure student is an outside collaborator (push); sends invite ---
+          GH_TOKEN="$ORG_PAT" gh api -X PUT "repos/$ORG/$REPO/collaborators/$USERNAME" -f permission=push >/dev/null
+
+          # --- write/backfill log (jq --arg = safe) ---
+          mkdir -p log
+          STAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          jq -n --arg t "$STAMP" --arg u "$UKEY" --arg n "$NAME" --arg e "$EMAIL" \
+                --arg c "$COURSE" --arg a "$ASSIGN" --arg s "$SEM" --arg r "$REPO" \
+            '{time:$t, username:$u, name:$n, email:$e, course:$c, assignment:$a, semester:$s, repo:$r}' \
+            > "log/$REPO.json"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "log/$REPO.json"
+          if git diff --cached --quiet; then
+            echo "log unchanged"
+          else
+            git commit -m "request: $REPO"
+            for i in 1 2 3 4 5; do
+              git push && break
+              echo "push race, retry $i"
+              git pull --rebase --autostash
+            done
+          fi
+
+          gh issue comment "$ISSUE" --body "✅ Repo: https://github.com/$ORG/$REPO
+👉 Accept the invite: https://github.com/$ORG/$REPO/invitations
+Then clone: \`gh repo clone $ORG/$REPO\`"
+          gh issue close "$ISSUE"
