@@ -1,0 +1,11 @@
+{
+    "instructor_username": "Kwooley",
+    "courses": {
+      "comsc140": {
+        "semester": "sp26",
+        "assignments": {
+        },
+        "student_repo_pattern": "comsc140-{semester}-{assignment}-{username}"
+      }
+    }
+  }
