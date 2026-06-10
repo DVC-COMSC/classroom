@@ -1,5 +1,5 @@
 {
-  "_README": "Copy this to config.json in YOUR school's classroom repo and fill in real values. One config.json per school repo. The gen-forms Action regenerates the request forms from it on every push. 'student_repo_pattern' is OPTIONAL — omit it and student repos are named {course}-{semester}-{assignment}-{username}. Only set it for a custom scheme, using the {course}/{semester}/{assignment}/{username} placeholders (never hardcode a course name, or copying a course block will collide repos).",
+  "_README": "Copy this to config.json in YOUR school's classroom repo and fill in real values. One config.json per school repo. The gen-forms Action regenerates the request forms from it on every push. 'student_repo_pattern' controls the student repo name — edit it freely, but use the {course}/{semester}/{assignment}/{username} placeholders. ALWAYS use {course} (never a literal course name like 'cs120'), so copying a course block to a new course can't collide repos. If omitted, it defaults to {course}-{semester}-{assignment}-{username}.",
   "instructor_username": "your-github-login",
   "courses": {
     "EXAMPLE101": {
@@ -11,7 +11,8 @@
           "available_from": "2026-06-29T00:00:00-07:00",
           "available_until": "2026-08-15T23:59:59-07:00"
         }
-      }
+      },
+      "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
     }
   }
 }
