@@ -38,6 +38,6 @@ Just **Submit** (nothing to fill in) → you get a comment listing **all** your 
 (it's instant once you use the class code).
 
 **Instructor:** course/assignment/semester values live in this repo's `config.json` (one per school).
-Edit it (here on GitHub or a clone) and the **sync-forms** Action regenerates the request forms
+Edit it (here on GitHub or a clone) and the **gen-forms** Action regenerates the request forms
 automatically. This repo is stamped from the `classroom-template`; code fixes arrive by merging the
 template. Student PII (name/email) and the submission report live in the private `…-admin` repo, never here.
