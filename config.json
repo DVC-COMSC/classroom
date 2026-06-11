@@ -1,11 +1,11 @@
 {
-  "instructor_username": "Kwooley",
   "courses": {
     "comsc140": {
-      "semester": "sp26",
       "assignments": {
         "A51": "comsc240-fa24-a51-COMSC240A51"
-      }
+      },
+      "semester": "sp26"
     }
-  }
+  },
+  "instructor_username": "Kwooley"
 }
