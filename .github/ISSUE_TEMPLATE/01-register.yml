@@ -21,7 +21,7 @@ body:
     attributes:
       label: Email
       description: Your school email.
-      placeholder: e.g. ecastro649@insite.4cd.edu
+      placeholder: e.g. youruserid@insite.4cd.edu
     validations:
       required: true
   - type: input
