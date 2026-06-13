@@ -1,8 +1,8 @@
 {
   "courses": {
-    "comsc140": {
+    "comsc240": {
       "assignments": {
-        "A51": "comsc240-fa24-a51-COMSC240A51"
+        "A51": "COMSC240A00Starter"
       },
       "semester": "sp26"
     }
