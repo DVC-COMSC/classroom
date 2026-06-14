@@ -2,9 +2,10 @@
   "courses": {
     "comsc240": {
       "assignments": {
-        "A00": "COMSC240A00Starter"
+        "A00": "COMSC240A00Starter",
+        "A05": "COMSC240A05"
       },
-      "semester": "sp26"
+      "semester": "su26"
     }
   },
   "instructor_username": "Kwooley"
