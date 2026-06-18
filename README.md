@@ -32,6 +32,16 @@ Re-requesting the same assignment is safe — it returns your existing repo.
 ### 3. My repos
 Just **Submit** (nothing to fill in) → you get a comment listing **all** your repos, with links.
 
+
+## After you request — finding your repo & invite
+
+The bot needs **~30 sec to a minute** (it runs in the background). You do **not** need to hunt the closed issue:
+
+- **Accept the invite** from your **email** or **github.com/notifications** — it arrives there automatically.
+- **See your repos anytime** → open the **My repos** form (above): the bot lists all your repos with links.
+- **Find your own request issue** → filter by author: `issues?q=is:issue+author:@me` (shows only yours; closed request issues are titled `request-<course>: <assignment> — @you`).
+
+
 ---
 
 **Not registered?** A request is rejected with the Register link — register first
