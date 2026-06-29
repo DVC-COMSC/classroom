@@ -19,5 +19,6 @@ body:
         - M1QP1
         - M1QP2
         - A51
+        - A52
     validations:
       required: true
