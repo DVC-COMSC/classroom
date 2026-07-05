@@ -22,5 +22,6 @@ body:
         - A52
         - A53
         - A54
+        - M2QP1
     validations:
       required: true
