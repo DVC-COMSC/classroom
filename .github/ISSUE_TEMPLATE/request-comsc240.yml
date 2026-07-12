@@ -27,5 +27,6 @@ body:
         - M2QP3
         - A71
         - A72
+        - A73
     validations:
       required: true
