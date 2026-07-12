@@ -4,20 +4,41 @@
       "assignments": {
         "A00": "COMSC240A00Starter",
         "A05": "COMSC240A05",
-        "M1QP1": "COMSC240M1QP1Starter",
-        "M1QP2": "COMSC240M1QP2Starter",
+        "M1QP1": {
+          "template": "COMSC240M1QP1Starter",
+          "available_until": "2026-08-17T23:59:59-07:00"
+        },
+        "M1QP2": {
+          "template": "COMSC240M1QP2Starter",
+          "available_until": "2026-08-17T23:59:59-07:00"
+        },
         "A51": "COMSC240A51Starter",
         "A52": "COMSC240A52Starter",
         "A53": "COMSC240A53Starter",
         "A54": "COMSC240A54Starter",
-        "M2QP1": "COMSC240M2QP1Starter",
-        "M2QP2": "COMSC240M2QP2Starter",
-        "M2QP3": "COMSC240M2QP3Starter",
+        "M2QP1": {
+          "template": "COMSC240M2QP1Starter",
+          "available_until": "2026-08-17T23:59:59-07:00"
+        },
+        "M2QP2": {
+          "template": "COMSC240M2QP2Starter",
+          "available_until": "2026-08-17T23:59:59-07:00"
+        },
+        "M2QP3": {
+          "template": "COMSC240M2QP3Starter",
+          "available_until": "2026-08-17T23:59:59-07:00"
+        },
         "A71": "COMSC240A71Starter",
         "A72": "COMSC240A72Starter",
         "A73": "COMSC240A73Starter",
-        "Q7P1": "COMSC240Q7P1Starter",
-        "Q7P2": "COMSC240Q7P2Starter"
+        "Q7P1": {
+          "template": "COMSC240Q7P1Starter",
+          "available_until": "2026-08-17T23:59:59-07:00"
+        },
+        "Q7P2": {
+          "template": "COMSC240Q7P2Starter",
+          "available_until": "2026-08-17T23:59:59-07:00"
+        }
       },
       "semester": "su26"
     }
