@@ -28,5 +28,7 @@ body:
         - A71
         - A72
         - A73
+        - Q7P1
+        - Q7P2
     validations:
       required: true
