@@ -38,6 +38,10 @@
         "Q7P2": {
           "template": "COMSC240Q7P2Starter",
           "available_until": "2026-08-17T23:59:59-07:00"
+        },
+        "Final-Exam": {
+          "template": "COMSC240Final-ExamStarter",
+          "available_until": "2026-08-17T23:59:59-07:00"
         }
       },
       "semester": "su26"
