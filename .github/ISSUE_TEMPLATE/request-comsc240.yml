@@ -30,5 +30,6 @@ body:
         - A73
         - Q7P1
         - Q7P2
+        - Final-Exam
     validations:
       required: true
