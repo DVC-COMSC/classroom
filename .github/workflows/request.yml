@@ -123,14 +123,20 @@ jobs:
           # --- ensure student is an outside collaborator (push); sends invite ---
           GH_TOKEN="$ORG_PAT" gh api -X PUT "repos/$ORG/$REPO/collaborators/$USERNAME" -f permission=push >/dev/null
 
-          # --- write log to the PRIVATE data repo (Contents API, ORG_PAT; PII not in public hub) ---
+          # --- hand the log record to the PRIVATE data repo as an ISSUE, never a commit ---
+          # A commit takes a branch-head lock: concurrent requests read the same head, one wins, the
+          # rest get HTTP 409. On 2026-07-19 a deadline rush killed 21 runs right here — under set -e
+          # the student notification below never ran, so repo+invite had succeeded but the student was
+          # told nothing, retried, and amplified the contention. Issue creation takes NO lock.
+          # `log-build` (classroom-admin, manual) drains these issues into log/*.json in ONE commit.
+          # Never fatal: repo + invite already succeeded, so the student MUST still be notified.
           STAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          LOG_B64="$(jq -n --arg t "$STAMP" --arg u "$UKEY" --arg n "$NAME" --arg e "$EMAIL" \
+          LOG_JSON="$(jq -nc --arg t "$STAMP" --arg u "$UKEY" --arg n "$NAME" --arg e "$EMAIL" \
                 --arg c "$COURSE" --arg a "$ASSIGN" --arg s "$SEM" --arg r "$REPO" \
-            '{time:$t, username:$u, name:$n, email:$e, course:$c, assignment:$a, semester:$s, repo:$r}' | base64 -w0)"
-          LSHA="$(GH_TOKEN="$ORG_PAT" gh api "repos/$DATA_REPO/contents/log/$REPO.json" --jq .sha 2>/dev/null || true)"
-          GH_TOKEN="$ORG_PAT" gh api -X PUT "repos/$DATA_REPO/contents/log/$REPO.json" \
-            -f message="request: $REPO" -f content="$LOG_B64" ${LSHA:+-f sha="$LSHA"} >/dev/null
+            '{time:$t, username:$u, name:$n, email:$e, course:$c, assignment:$a, semester:$s, repo:$r}')"
+          GH_TOKEN="$ORG_PAT" gh issue create --repo "$DATA_REPO" \
+            --title "log: $REPO" --body "$LOG_JSON" >/dev/null \
+            || echo "::warning::log issue failed for $REPO — repo+invite OK, backfill later"
 
           # rename the issue so the Closed list is self-identifying (each student sees their own)
           gh issue edit "$ISSUE" --title "request-${COURSE}: ${ASSIGN} — @${USERNAME}" >/dev/null 2>&1 || true
