@@ -110,7 +110,12 @@ jobs:
             # Template must EXIST and be marked a template repo — `gh repo create --template` requires it.
             # Check up front so a mis-set template reports the reason via fail(), instead of crashing under
             # `set -e` at the create line (which left the issue silently Open with no comment).
-            IS_TPL="$(GH_TOKEN="$ORG_PAT" gh repo view "$ORG/$TEMPLATE" --json isTemplate --jq .isTemplate 2>/dev/null || echo missing)"
+            # REST, not `gh repo view --json` (GraphQL): GraphQL has its own hourly quota, and when
+            # it is exhausted the call fails, `|| echo missing` turns that into "template not found",
+            # and the student is told their repo cannot be created — for a template that is present
+            # and correct. Happened 2026-07-20 02:09-02:10 PDT (3 students) after instructor tooling
+            # drained the shared token's GraphQL budget. REST carries a separate, far larger budget.
+            IS_TPL="$(GH_TOKEN="$ORG_PAT" gh api "repos/$ORG/$TEMPLATE" --jq '.is_template' 2>/dev/null || echo missing)"
             case "$IS_TPL" in
               true)  : ;;
               false) fail "❌ Could not create your repo: \`$ORG/$TEMPLATE\` is not a template repository." ;;
