@@ -1,5 +1,6 @@
 {
   "_README": "Copy this to config.json in YOUR school's classroom repo and fill in real values. One config.json per school repo. The gen-forms Action regenerates the request forms from it on every push. 'student_repo_pattern' controls the student repo name — edit it freely, but use the {course}/{semester}/{assignment}/{username} placeholders. ALWAYS use {course} (never a literal course name like 'cs120'), so copying a course block to a new course can't collide repos. If omitted, it defaults to {course}-{semester}-{assignment}-{username}.",
+  "_README_quiz": "A quiz/exam takes \"requires_code\": true (see Q1). The student must then type a matching access code on the request form or NO repo is created. Put that code inside the Canvas quiz, so only a student who actually started the quiz has it — a time window alone does NOT protect an exam: while it is open anyone can provision the repo and read the questions early (see Q2 for the time-gate form, which is still available and can be combined). ⛔ The code itself is NEVER written here — this repo is PUBLIC. It lives in the PRIVATE <org>/classroom-admin repo, in quiz-codes.json, as {\"<course>\": {\"<assignment>\": \"<code>\"}}. Set both halves with: ops/config.sh <org> add-quiz <course> <id> <template> '<code>'.",
   "instructor_username": "your-github-login",
   "courses": {
     "EXAMPLE101": {
@@ -8,6 +9,10 @@
         "A00": "EXAMPLE101-template-repo-name",
         "Q1": {
           "template": "EXAMPLE101-exam-template-repo",
+          "requires_code": true
+        },
+        "Q2": {
+          "template": "EXAMPLE101-exam2-template-repo",
           "available_from": "2026-06-29T00:00:00-07:00",
           "available_until": "2026-08-15T23:59:59-07:00"
         }

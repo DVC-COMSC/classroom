@@ -41,8 +41,22 @@ jq -r '.courses | keys_unsorted[]' "$CONFIG" | while read -r course; do
     printf '      label: Assignment\n'
     printf '      description: (Auto-generated from config.json — do not hand-edit.)\n'
     printf '      options:\n'
-    jq -r --arg c "$course" '.courses[$c].assignments | keys_unsorted[] | "        - " + .' "$CONFIG"
+    # sort -V = natural order so the dropdown is A51<A52<...<A59<A510<A511 (not lexical A510<A52),
+    # regardless of the order assignments were added to config.json.
+    jq -r --arg c "$course" '.courses[$c].assignments | keys_unsorted[]' "$CONFIG" | sort -V | sed 's/^/        - /'
     printf '    validations:\n      required: true\n'
+    # Access-code box — emitted ONLY for a course that has at least one code-gated assignment
+    # ("requires_code": true, i.e. a quiz/exam). One form serves the whole course, so the box also
+    # shows on regular-assignment requests: request.yml IGNORES it unless the picked assignment is
+    # code-gated, and the label says so — a student must never be blocked for a stray value here.
+    if jq -e --arg c "$course" \
+         '[.courses[$c].assignments[] | select(type=="object" and (.requires_code // false))] | length > 0' \
+         "$CONFIG" >/dev/null; then
+      printf '  - type: input\n    id: access_code\n    attributes:\n'
+      printf '      label: Access code\n'
+      printf '      description: Quizzes and exams ONLY — leave this blank for regular assignments. The code is inside the quiz on Canvas.\n'
+      printf '    validations:\n      required: false\n'
+    fi
   } > "$out"
   n="$(jq -r --arg c "$course" '.courses[$c].assignments | length' "$CONFIG")"
   printf 'gen-forms: generated %s  (%s assignments)\n' "request-$course.yml" "$n"
