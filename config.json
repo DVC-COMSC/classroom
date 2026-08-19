@@ -45,6 +45,11 @@
         }
       },
       "semester": "su26"
+    },
+    "comsc110": {
+      "assignments": {},
+      "semester": "fa26",
+      "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
     }
   },
   "instructor_username": "Kwooley"

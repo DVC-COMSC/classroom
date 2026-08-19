@@ -16,20 +16,20 @@ body:
       options:
         - A00
         - A05
-        - M1QP1
-        - M1QP2
         - A51
         - A52
         - A53
         - A54
-        - M2QP1
-        - M2QP2
-        - M2QP3
         - A71
         - A72
         - A73
+        - Final-Exam
+        - M1QP1
+        - M1QP2
+        - M2QP1
+        - M2QP2
+        - M2QP3
         - Q7P1
         - Q7P2
-        - Final-Exam
     validations:
       required: true
