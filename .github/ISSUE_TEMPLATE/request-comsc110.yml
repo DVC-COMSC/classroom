@@ -19,5 +19,6 @@ body:
         - A23
         - A24
         - A25
+        - A26
     validations:
       required: true
