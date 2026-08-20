@@ -1,7 +1,9 @@
 {
   "courses": {
     "comsc110": {
-      "assignments": {},
+      "assignments": {
+        "A21": "COMSC110A21Starter"
+      },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
     }

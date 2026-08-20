@@ -14,5 +14,6 @@ body:
       label: Assignment
       description: (Auto-generated from config.json — do not hand-edit.)
       options:
+        - A21
     validations:
       required: true
