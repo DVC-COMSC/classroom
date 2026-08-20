@@ -15,5 +15,6 @@ body:
       description: (Auto-generated from config.json — do not hand-edit.)
       options:
         - A21
+        - A22
     validations:
       required: true
