@@ -7,7 +7,8 @@
         "A23": "COMSC110A23Starter",
         "A24": "COMSC110A24Starter",
         "A25": "COMSC110A25Starter",
-        "A26": "COMSC110A26Starter"
+        "A26": "COMSC110A26Starter",
+        "W25": "COMSC110W25Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"

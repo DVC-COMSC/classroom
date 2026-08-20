@@ -20,5 +20,6 @@ body:
         - A24
         - A25
         - A26
+        - W25
     validations:
       required: true
