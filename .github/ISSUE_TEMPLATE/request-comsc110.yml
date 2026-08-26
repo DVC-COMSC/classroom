@@ -26,6 +26,7 @@ body:
         - A33
         - A34
         - A35
+        - Q3Q1
         - W25
     validations:
       required: true
