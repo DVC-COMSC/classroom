@@ -30,3 +30,10 @@ body:
         - W25
     validations:
       required: true
+  - type: input
+    id: access_code
+    attributes:
+      label: Access code
+      description: Quizzes and exams ONLY — leave this blank for regular assignments. The code is inside the quiz on Canvas.
+    validations:
+      required: false

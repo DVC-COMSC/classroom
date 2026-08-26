@@ -15,7 +15,10 @@
         "A33": "COMSC110A33Starter",
         "A34": "COMSC110A34Starter",
         "A35": "COMSC110A35Starter",
-        "Q3Q1": "COMSC110Q3Q1Starter"
+        "Q3Q1": {
+          "template": "COMSC110Q3Q1Starter",
+          "requires_code": true
+        }
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
