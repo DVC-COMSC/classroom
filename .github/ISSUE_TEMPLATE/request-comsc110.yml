@@ -24,6 +24,7 @@ body:
         - A31
         - A32
         - A33
+        - A34
         - W25
     validations:
       required: true
