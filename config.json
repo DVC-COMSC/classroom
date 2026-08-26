@@ -13,7 +13,8 @@
         "A31": "COMSC110A31Starter",
         "A32": "COMSC110A32Starter",
         "A33": "COMSC110A33Starter",
-        "A34": "COMSC110A34Starter"
+        "A34": "COMSC110A34Starter",
+        "A35": "COMSC110A35Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
