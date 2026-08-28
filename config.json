@@ -25,7 +25,10 @@
         "A44": "COMSC110A44Starter",
         "A45": "COMSC110A45Starter",
         "A46": "COMSC110A46Starter",
-        "Q41": "COMSC110Q41Starter",
+        "Q41": {
+          "template": "COMSC110Q41Starter",
+          "requires_code": true
+        },
         "Q42": "COMSC110Q42Starter",
         "Q43": "COMSC110Q43Starter"
       },
