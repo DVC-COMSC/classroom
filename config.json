@@ -29,7 +29,10 @@
           "template": "COMSC110Q41Starter",
           "requires_code": true
         },
-        "Q42": "COMSC110Q42Starter",
+        "Q42": {
+          "template": "COMSC110Q42Starter",
+          "requires_code": true
+        },
         "Q43": "COMSC110Q43Starter"
       },
       "semester": "fa26",
