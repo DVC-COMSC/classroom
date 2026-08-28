@@ -25,7 +25,8 @@
         "A44": "COMSC110A44Starter",
         "A45": "COMSC110A45Starter",
         "A46": "COMSC110A46Starter",
-        "Q41": "COMSC110Q41Starter"
+        "Q41": "COMSC110Q41Starter",
+        "Q42": "COMSC110Q42Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"

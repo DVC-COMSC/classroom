@@ -34,6 +34,7 @@ body:
         - A46
         - Q3Q1
         - Q41
+        - Q42
         - W25
     validations:
       required: true
