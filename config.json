@@ -20,7 +20,8 @@
           "requires_code": true
         },
         "A41": "COMSC110A41Starter",
-        "A42": "COMSC110A42Starter"
+        "A42": "COMSC110A42Starter",
+        "A43": "COMSC110A43Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
