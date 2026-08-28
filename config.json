@@ -18,7 +18,8 @@
         "Q3Q1": {
           "template": "COMSC110Q3Q1Starter",
           "requires_code": true
-        }
+        },
+        "A41": "COMSC110A41Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
