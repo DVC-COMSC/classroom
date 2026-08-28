@@ -33,7 +33,10 @@
           "template": "COMSC110Q42Starter",
           "requires_code": true
         },
-        "Q43": "COMSC110Q43Starter"
+        "Q43": {
+          "template": "COMSC110Q43Starter",
+          "requires_code": true
+        }
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
