@@ -37,7 +37,8 @@
           "template": "COMSC110Q43Starter",
           "requires_code": true
         },
-        "A51": "COMSC110A51Starter"
+        "A51": "COMSC110A51Starter",
+        "A52": "COMSC110A52Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
