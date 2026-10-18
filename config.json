@@ -49,6 +49,10 @@
         "Q5Q1": {
           "template": "COMSC110Q5Q1Starter",
           "requires_code": true
+        },
+        "Q5Q2": {
+          "template": "COMSC110Q5Q2Starter",
+          "requires_code": true
         }
       },
       "semester": "fa26",
