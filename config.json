@@ -61,7 +61,8 @@
         "Q5Q4": {
           "template": "COMSC110Q5Q4Starter",
           "requires_code": true
-        }
+        },
+        "A61": "COMSC110A61Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
