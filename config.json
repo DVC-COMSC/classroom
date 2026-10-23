@@ -64,7 +64,8 @@
         },
         "A61": "COMSC110A61Starter",
         "A62": "COMSC110A62Starter",
-        "A63": "COMSC110A63Starter"
+        "A63": "COMSC110A63Starter",
+        "A64": "COMSC110A64Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
