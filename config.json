@@ -69,6 +69,10 @@
         "Q6Q1": {
           "template": "COMSC110Q6Q1Starter",
           "requires_code": true
+        },
+        "Q6Q2": {
+          "template": "COMSC110Q6Q2Starter",
+          "requires_code": true
         }
       },
       "semester": "fa26",
