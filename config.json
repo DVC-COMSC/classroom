@@ -75,7 +75,8 @@
           "requires_code": true
         },
         "A71": "COMSC110A71Starter",
-        "A72": "COMSC110A72Starter"
+        "A72": "COMSC110A72Starter",
+        "A73": "COMSC110A73Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
