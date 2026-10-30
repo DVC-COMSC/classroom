@@ -79,7 +79,8 @@
         "A73": "COMSC110A73Starter",
         "A74": "COMSC110A74Starter",
         "A75": "COMSC110A75Starter",
-        "A76": "COMSC110A76Starter"
+        "A76": "COMSC110A76Starter",
+        "A77": "COMSC110A77Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
