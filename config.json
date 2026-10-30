@@ -88,6 +88,10 @@
         "Q72": {
           "template": "COMSC110Q72Starter",
           "requires_code": true
+        },
+        "Q74": {
+          "template": "COMSC110Q74Starter",
+          "requires_code": true
         }
       },
       "semester": "fa26",
