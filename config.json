@@ -101,7 +101,8 @@
           "template": "COMSC110Q73Starter",
           "requires_code": true
         },
-        "A111": "COMSC110A111Starter"
+        "A111": "COMSC110A111Starter",
+        "A112": "COMSC110A112Starter"
       },
       "semester": "fa26",
       "student_repo_pattern": "{course}-{semester}-{assignment}-{username}"
